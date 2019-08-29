@@ -4,6 +4,7 @@ import { SfAnytimeService } from '../shared/services/sf-anytime.service';
 import { ISearchResult } from '../shared/services/search-result';
 import { SvtPlayService } from '../shared/services/svt-play.service';
 import { ViaplayService } from '../shared/services/viaplay.service';
+import { CmoreService } from '../shared/services/cmore.service';
 import { merge } from 'rxjs';
 
 @Component({
@@ -22,6 +23,7 @@ export class SearchComponent {
     private sfAnytimeService: SfAnytimeService,
     private svtPlayService: SvtPlayService,
     private viaplayService: ViaplayService,
+    private cmoreService: CmoreService,
   ) {
     this.searchForm = this.formBuilder.group({
       term: '',
@@ -45,6 +47,7 @@ export class SearchComponent {
       this.sfAnytimeService.search(searchTerm),
       this.svtPlayService.search(searchTerm),
       this.viaplayService.search(searchTerm),
+      this.cmoreService.search(searchTerm),
     ).subscribe(
       value => {
         this.results.push(value);

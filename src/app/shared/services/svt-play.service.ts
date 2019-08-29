@@ -27,8 +27,10 @@ export class SvtPlayService {
     const searchUrl = `${getCorsProxyUrl(SvtPlayService.url)}?q=${encodeURIComponent(term)}`;
     return this.http.get(searchUrl)
       .pipe(
-        // tslint:disable-next-line: no-console
-        tap(_ => console.info(`Search '${SvtPlayService.title}' for '${term}' using ${searchUrl}...`)),
+        tap(() => {
+          // tslint:disable-next-line: no-console
+          console.info(`Search '${SvtPlayService.title}' for '${term}' using ${searchUrl}...`);
+        }),
         map(response => {
           const json = response as any;
           const count = json && json.totalResults

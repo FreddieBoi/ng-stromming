@@ -1,4 +1,10 @@
 <form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
   <input type="text" placeholder="Search for content..." formControlName="term" />
-  <button type="submit"> Search</button>
+  <button type="submit" [disabled]="isSearching">Search</button>
 </form>
+<ul>
+  <li *ngFor="let result of results" className="result">
+    <a className="result-name" [href]="result.href">{{result.title}}</a> has <strong
+      className="h4 result-count">{{result.count}}</strong> content match{{result.count === 1 ? "" : "es"}}!
+  </li>
+</ul>

@@ -31,8 +31,10 @@ export class SfAnytimeService {
     const data = `{"requests":[{"indexName":"prod_sfanytime_movies","params":"query=${encodeURIComponent(term)}&numericFilters=adult%3D0%2C%20available_in_se%3D1&hitsPerPage=60&maxValuesPerFacet=3&page=0&attributesToRetrieve=mediaid%2Cproducttype%2Cproducttypeid%2Ctitle%2Ctitle_sv%2Ctitle_no%2Ctitle_da%2Ctitle_fi%2Ccover_id%2Ccover_no%2Ccover_sv%2Ccover_da%2Ccover_fi&distinct=true&facets=%5B%5D&tagFilters="}]}`;
     return this.http.post(SfAnytimeService.url, data)
       .pipe(
-        // tslint:disable-next-line: no-console
-        tap(_ => console.info(`Search '${SfAnytimeService.title}' for '${term}' using ${SfAnytimeService.url}...`)),
+        tap(() => {
+          // tslint:disable-next-line: no-console
+          console.info(`Search '${SfAnytimeService.title}' for '${term}' using ${SfAnytimeService.url}...`);
+        }),
         map(response => {
           const json = response as any;
           const count = json &&

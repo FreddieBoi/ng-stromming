@@ -4,6 +4,7 @@ import { SfAnytimeService } from '../shared/services/sf-anytime.service';
 import { ISearchResult } from '../shared/services/search-result';
 import { SvtPlayService } from '../shared/services/svt-play.service';
 import { ViaplayService } from '../shared/services/viaplay.service';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -28,6 +29,7 @@ export class SearchComponent {
   }
 
   search(data) {
+    this.isSearching = true;
     this.searchForm.disable();
     this.results = [];
     const searchTerm = data.term
@@ -36,12 +38,30 @@ export class SearchComponent {
     if (!searchTerm) {
       return;
     }
+    // tslint:disable-next-line: no-console
+    console.info(`Searching...`);
     this.searchForm.reset();
-    this.sfAnytimeService.search(searchTerm).subscribe(result => this.results.push(result));
-    this.svtPlayService.search(searchTerm).subscribe(result => this.results.push(result));
-    this.viaplayService.search(searchTerm).subscribe(result => this.results.push(result));
-    // TODO: Invoke "later"...
-    this.searchForm.enable();
+    merge(
+      this.sfAnytimeService.search(searchTerm),
+      this.svtPlayService.search(searchTerm),
+      this.viaplayService.search(searchTerm),
+    ).subscribe(
+      value => {
+        this.results.push(value);
+      },
+      error => {
+        // tslint:disable-next-line: no-console
+        console.error(`Search failed: ${error}`);
+        this.isSearching = false;
+        this.searchForm.enable();
+      },
+      () => {
+        // tslint:disable-next-line: no-console
+        console.info(`Search complete!`);
+        this.isSearching = false;
+        this.searchForm.enable();
+      },
+    );
   }
 
 }

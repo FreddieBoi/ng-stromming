@@ -1,6 +1,7 @@
+import { IServiceInfo } from "./service-info";
+
 export interface ISearchResult {
-  title: string;
-  href: string;
+  info: IServiceInfo;
   count: number;
   error?: string;
 }

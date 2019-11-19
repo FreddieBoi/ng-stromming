@@ -1,0 +1,57 @@
+app-top, 
+app-search,
+app-bottom {
+  display: block;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+app-top {
+  padding-bottom: 50px;
+
+  h1 {
+    color: white;
+    padding-top: 20px;
+  }
+}
+
+app-search {
+  padding-bottom: 50px;
+}
+
+app-bottom {
+  position: absolute;
+  padding-top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: gray;
+  border-top: 1px solid dimgray;
+  background: #1f1f1f;
+
+  a {
+    color: darkgray;
+    font-weight: normal;
+    &:hover,
+    &:focus {
+      color: lightgray;
+    }
+  }
+}
+
+html,
+body {
+  background: #303030;
+  color: whitesmoke;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+h1 {
+  margin-top: 0;
+}

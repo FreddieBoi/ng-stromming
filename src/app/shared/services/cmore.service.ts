@@ -3,6 +3,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { IServiceInfo } from './service-info';
 
 /**
  * Sample URL; https://cmore-public-web-graphql-prod.herokuapp.com/graphql
@@ -127,9 +128,10 @@ export class CmoreService {
 }
 `;
 
-  public static readonly title = 'C MORE';
-
-  public static readonly href = 'https://www.cmore.se/';
+  public static readonly info: IServiceInfo = {
+    title: 'C MORE',
+    href: 'https://www.cmore.se/',
+  };
 
   constructor(private http: HttpClient) {
 
@@ -145,7 +147,7 @@ export class CmoreService {
       .pipe(
         tap(() => {
           // tslint:disable-next-line: no-console
-          console.info(`Search '${CmoreService.title}' for '${term}' using ${CmoreService.url}...`);
+          console.info(`Search '${CmoreService.info.title}' for '${term}' using ${CmoreService.url}...`);
         }),
         map(responses => {
           const count = responses.map(response => {
@@ -158,21 +160,19 @@ export class CmoreService {
               : 0;
           }).reduce((a, b) => a + b, 0);
           // tslint:disable-next-line: no-console
-          console.info(`Search '${CmoreService.title}' for '${term}' found ${count} hits!`);
+          console.info(`Search '${CmoreService.info.title}' for '${term}' found ${count} hits!`);
           return {
             count,
-            href: CmoreService.href,
-            title: CmoreService.title,
+            info: CmoreService.info,
           };
         }),
         catchError(error => {
           // tslint:disable-next-line: no-console
-          console.error(`Search '${CmoreService.title}' for '${term}' failed!`);
+          console.error(`Search '${CmoreService.info.title}' for '${term}' failed!`);
           return of({
             count: 0,
             error,
-            href: CmoreService.href,
-            title: CmoreService.title,
+            info: CmoreService.info,
           });
         })
       );

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { getCorsProxyUrl } from './utils';
+import { IServiceInfo } from './service-info';
 
 /**
  * Sample URL; https://content.viaplay.se/pcdash-se/search?query=mysearchterm
@@ -15,9 +16,10 @@ export class ViaplayService {
 
   private static readonly url = 'https://content.viaplay.se/pcdash-se/search';
 
-  public static readonly title = 'Viaplay';
-
-  public static readonly href = 'https://viaplay.se/';
+  public static readonly info: IServiceInfo = {
+    title: 'Viaplay',
+    href: 'https://viaplay.se/',
+  };
 
   constructor(private http: HttpClient) {
 
@@ -29,7 +31,7 @@ export class ViaplayService {
       .pipe(
         tap(() => {
           // tslint:disable-next-line: no-console
-          console.info(`Search '${ViaplayService.title}' for '${term}' using ${searchUrl}...`);
+          console.info(`Search '${ViaplayService.info.title}' for '${term}' using ${searchUrl}...`);
         }),
         map(response => {
           const json = response as any;
@@ -41,48 +43,22 @@ export class ViaplayService {
             ? json._embedded['viaplay:blocks'][0].totalProductCount
             : 0;
           // tslint:disable-next-line: no-console
-          console.info(`Search '${ViaplayService.title}' for '${term}' found ${count} hits!`);
+          console.info(`Search '${ViaplayService.info.title}' for '${term}' found ${count} hits!`);
           return {
             count,
-            href: ViaplayService.href,
-            title: ViaplayService.title,
+            info: ViaplayService.info,
           };
         }),
         catchError(error => {
           // tslint:disable-next-line: no-console
-          console.error(`Search '${ViaplayService.title}' for '${term}' failed!`);
+          console.error(`Search '${ViaplayService.info.title}' for '${term}' failed!`);
           return of({
             count: 0,
             error,
-            href: ViaplayService.href,
-            title: ViaplayService.title,
+            info: ViaplayService.info,
           });
         })
       );
-    // .then(
-    //   (json: any) => {
-    //     const count = json &&
-    //       json._embedded &&
-    //       json._embedded['viaplay:blocks'] &&
-    //       json._embedded['viaplay:blocks'][0] &&
-    //       json._embedded['viaplay:blocks'][0].totalProductCount
-    //       ? json._embedded['viaplay:blocks'][0].totalProductCount
-    //       : 0;
-    //     return {
-    //       count,
-    //       href: this.href,
-    //       name: this.name,
-    //     };
-    //   },
-    //   (reason: any) => {
-    //     return {
-    //       count: 0,
-    //       error: reason,
-    //       href: this.href,
-    //       name: this.name,
-    //     };
-    //   },
-    // );
   }
 
 }

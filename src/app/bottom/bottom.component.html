@@ -1,5 +1,12 @@
 <footer>
-    <p>
-        Written by <a href="https://github.com/FreddieBoi">FreddieBoi</a>.
-    </p>
+  <ul class="service-info-list">
+    <li class="service-info" *ngFor="let serviceInfo of serviceInfos">
+      <a [href]="serviceInfo.href" [title]="serviceInfo.title">
+        <img class="service-info-icon" [src]="serviceInfo.href + 'favicon.ico'" /> {{serviceInfo.title}}
+      </a>
+    </li>
+  </ul>
+  <p>
+    Written by <a href="https://github.com/FreddieBoi">FreddieBoi</a>.
+  </p>
 </footer>

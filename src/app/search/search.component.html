@@ -1,10 +1,19 @@
-<form [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
-  <input type="text" placeholder="Search for content..." formControlName="term" />
-  <button type="submit" [disabled]="isSearching">Search</button>
-</form>
-<ul>
-  <li *ngFor="let result of results" className="result">
-    <a className="result-name" [href]="result.href">{{result.title}}</a> has <strong
-      className="h4 result-count">{{result.count}}</strong> content match{{result.count === 1 ? "" : "es"}}!
+<div class="search">
+  <form *ngIf="!isSearching" [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
+    <input type="search" placeholder="Search for content..." formControlName="term" />
+    <button type="submit" [disabled]="isSearching || !searchForm.value">Search</button>
+  </form>
+  <p *ngIf="isSearching">
+    Searching for content...
+  </p>
+</div>
+<ul class="result-list">
+  <li *ngFor="let result of results" class="result">
+    <a [href]="result.info.href">
+      <img class="service-info-icon" [src]="result.info.href + 'favicon.ico'" />
+      <br />
+      <strong>{{result.info.title}}</strong> has <strong class="h4 result-count">{{result.count}}</strong> content
+      match{{result.count === 1 ? "" : "es"}}!
+    </a>
   </li>
 </ul>

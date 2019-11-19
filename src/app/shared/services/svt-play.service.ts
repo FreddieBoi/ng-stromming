@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { IServiceInfo } from './service-info';
 
 /**
  * Sample URL; https://api.svt.se/contento/graphql
@@ -14,9 +15,10 @@ export class SvtPlayService {
 
   private static readonly url = 'https://api.svt.se/contento/graphql';
 
-  public static readonly title = 'SVT Play';
-
-  public static readonly href = 'https://www.svtplay.se/';
+  public static readonly info: IServiceInfo = {
+    title: 'SVT Play',
+    href: 'https://www.svtplay.se/',
+  };
 
   constructor(private http: HttpClient) {
 
@@ -28,7 +30,7 @@ export class SvtPlayService {
       .pipe(
         tap(() => {
           // tslint:disable-next-line: no-console
-          console.info(`Search '${SvtPlayService.title}' for '${term}' using ${searchUrl}...`);
+          console.info(`Search '${SvtPlayService.info.title}' for '${term}' using ${searchUrl}...`);
         }),
         map(response => {
           const json = response as any;
@@ -36,21 +38,19 @@ export class SvtPlayService {
             ? json.data.search.length
             : 0;
           // tslint:disable-next-line: no-console
-          console.info(`Search '${SvtPlayService.title}' for '${term}' found ${count} hits!`);
+          console.info(`Search '${SvtPlayService.info.title}' for '${term}' found ${count} hits!`);
           return {
             count,
-            href: SvtPlayService.href,
-            title: SvtPlayService.title,
+            info: SvtPlayService.info,
           };
         }),
         catchError(error => {
           // tslint:disable-next-line: no-console
-          console.error(`Search '${SvtPlayService.title}' for '${term}' failed!`);
+          console.error(`Search '${SvtPlayService.info.title}' for '${term}' failed!`);
           return of({
             count: 0,
             error,
-            href: SvtPlayService.href,
-            title: SvtPlayService.title,
+            info: SvtPlayService.info,
           });
         })
       );

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { IServiceInfo } from './service-info';
 
 /**
  * Sample URL; https://e38fd90mob-dsn.algolia.net/1/indexes//queries?
@@ -18,9 +19,10 @@ export class SfAnytimeService {
   // tslint:disable-next-line: max-line-length
   private static readonly url = 'https://e38fd90mob-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%20(lite)%203.21.1%3Binstantsearch.js%201.11.7%3BJS%20Helper%202.19.0&x-algolia-application-id=E38FD90MOB&x-algolia-api-key=3f56a452156f1a76c8939af1798a2335';
 
-  public static readonly title = 'SF Anytime';
-
-  public static readonly href = 'https://www.sfanytime.com/sv';
+  public static readonly info: IServiceInfo = {
+    title: 'SF Anytime',
+    href: 'https://www.sfanytime.com/',
+  };
 
   constructor(private http: HttpClient) {
 
@@ -33,7 +35,7 @@ export class SfAnytimeService {
       .pipe(
         tap(() => {
           // tslint:disable-next-line: no-console
-          console.info(`Search '${SfAnytimeService.title}' for '${term}' using ${SfAnytimeService.url}...`);
+          console.info(`Search '${SfAnytimeService.info.title}' for '${term}' using ${SfAnytimeService.url}...`);
         }),
         map(response => {
           const json = response as any;
@@ -44,21 +46,19 @@ export class SfAnytimeService {
             ? json.results[0].nbHits
             : 0;
           // tslint:disable-next-line: no-console
-          console.info(`Search '${SfAnytimeService.title}' for '${term}' found ${count} hits!`);
+          console.info(`Search '${SfAnytimeService.info.title}' for '${term}' found ${count} hits!`);
           return {
             count,
-            href: SfAnytimeService.href,
-            title: SfAnytimeService.title,
+            info: SfAnytimeService.info,
           };
         }),
         catchError(error => {
           // tslint:disable-next-line: no-console
-          console.error(`Search '${SfAnytimeService.title}' for '${term}' failed!`);
+          console.error(`Search '${SfAnytimeService.info.title}' for '${term}' failed!`);
           return of({
             count: 0,
             error,
-            href: SfAnytimeService.href,
-            title: SfAnytimeService.title,
+            info: SfAnytimeService.info,
           });
         })
       );

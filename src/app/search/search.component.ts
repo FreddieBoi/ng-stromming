@@ -50,7 +50,9 @@ export class SearchComponent {
       this.cmoreService.search(searchTerm),
     ).subscribe(
       value => {
-        this.results.push(value);
+        if (value && value.count > 0) {
+          this.results.push(value);
+        }
       },
       error => {
         // tslint:disable-next-line: no-console
